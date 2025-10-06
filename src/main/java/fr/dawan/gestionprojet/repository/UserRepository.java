@@ -9,11 +9,9 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+    @EntityGraph(attributePaths = "roles")
     Optional<User> findByUsername(String username);
     Optional<User> findByEmail(String email);
 
     // utile pour charger les roles en même temps (évite LAZY exception à l'auth)
-    @EntityGraph(attributePaths = "roles")
-    Optional<User> findByUsernameWithRoles(String username);
-
 }
