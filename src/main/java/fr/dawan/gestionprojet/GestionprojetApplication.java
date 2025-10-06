@@ -54,6 +54,7 @@ public class GestionprojetApplication {
 	@ToString.Exclude
 	private Set<Task> tasks;
 
+
 	Bonne pratique : éviter d’inclure des collections ou relations longues dans toString().
 
 
