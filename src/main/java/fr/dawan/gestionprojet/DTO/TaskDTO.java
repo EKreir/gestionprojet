@@ -9,7 +9,7 @@ public class TaskDTO {
     private String title;
     private String description;
     private TaskStatus  status;
-    private LocalDate dueDate;
+    private LocalDate  dueDate;
     private Long projectId;
     private Long assignedUserId;
 }
