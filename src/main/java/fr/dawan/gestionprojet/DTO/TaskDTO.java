@@ -10,6 +10,6 @@ public class TaskDTO {
     private String description;
     private TaskStatus  status;
     private LocalDate  dueDate;
-    private Long projectId;
+    private Long  projectId;
     private Long assignedUserId;
 }
