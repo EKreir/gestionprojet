@@ -2,6 +2,7 @@ package fr.dawan.gestionprojet.service.impl;
 
 import fr.dawan.gestionprojet.DTO.ProjectDTO;
 import fr.dawan.gestionprojet.DTO.TaskDTO;
+import fr.dawan.gestionprojet.DTO.UserDTO;
 import fr.dawan.gestionprojet.exception.ResourceNotFoundException;
 import fr.dawan.gestionprojet.model.entity.Project;
 import fr.dawan.gestionprojet.model.entity.Task;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,9 +66,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public void delete(Long id) {
-        if (!projectRepository.existsById(id)) throw new ResourceNotFoundException("project introuvable", id);
-        projectRepository.existsById(id);
-
+        if (!projectRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Project not found", id);
+        }
+        projectRepository.deleteById(id); // ✅ suppression réelle
     }
 
     @Override
@@ -78,6 +81,43 @@ public class ProjectServiceImpl implements ProjectService {
         p.getMembers().add(u);
         Project saved = projectRepository.save(p);
         return toDto(saved);
+    }
+
+    @Override
+    @Transactional
+    public ProjectDTO removeMember(Long projectId, Long userId) {
+        Project p = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found", projectId));
+        User u = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found", userId));
+
+        if (p.getMembers() != null) {
+            p.getMembers().remove(u); // supprime réellement
+        }
+
+        Project saved = projectRepository.save(p);
+        return toDto(saved);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Set<UserDTO> getMembers(Long projectId) {
+        Project p = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found", projectId));
+
+        if (p.getMembers() == null) return new HashSet<>();
+
+        return p.getMembers().stream()
+                .map(u -> {
+                    UserDTO dto = new UserDTO();
+                    dto.setId(u.getId());
+                    dto.setUsername(u.getUsername());
+                    dto.setEmail(u.getEmail());
+                    if (u.getRoles() != null)
+                        dto.setRoles(u.getRoles().stream().map(r -> r.getName()).collect(Collectors.toSet()));
+                    return dto;
+                })
+                .collect(Collectors.toSet());
     }
 
     private TaskDTO taskToDto(Task t) {

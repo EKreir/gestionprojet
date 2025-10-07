@@ -5,6 +5,7 @@ import fr.dawan.gestionprojet.DTO.UserDTO;
 
 
 import java.util.List;
+import java.util.Set;
 
 public interface ProjectService {
     List<ProjectDTO> findAll();
@@ -13,4 +14,8 @@ public interface ProjectService {
     ProjectDTO update(Long id, ProjectDTO dto);
     void delete(Long id);
     ProjectDTO addMember(Long projectId, Long userId);
+    ProjectDTO removeMember(Long projectId, Long userId);
+    Set<UserDTO> getMembers(Long projectId);
+
+
 }
