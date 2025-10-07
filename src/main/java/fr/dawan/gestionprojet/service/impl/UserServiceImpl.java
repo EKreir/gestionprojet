@@ -87,4 +87,15 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 
+    /*
+    Notes :
+
+    PasswordEncoder injecté -- si on n’a pas encore Spring Security, on peut commenter et stocker raw (fortement déconseillé).
+    create() encodera le mot de passe via passwordEncoder.encode(rawPassword)
+    (important pour sécurité).
+
+
+
+    */
+
 }
