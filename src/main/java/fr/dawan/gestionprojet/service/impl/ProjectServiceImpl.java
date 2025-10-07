@@ -97,8 +97,28 @@ public class ProjectServiceImpl implements ProjectService {
         dto.setEndDate(p.getEndDate());
         if (p.getMembers() != null)
             dto.setMemberIds(p.getMembers().stream().map(User::getId).collect(Collectors.toSet()));
-        // optionally add tasks if you want:
+        // optionel: ajout des tâches si on veut :
         // dto.tasks = p.getTasks().stream().map(this::taskToDto).collect(Collectors.toList());
         return dto;
     }
+
+    /*
+
+    Rôle :
+    Gérer la logique métier des projets (création, mise à jour, suppression, affectation de tâches).
+
+    Pourquoi cette logique ?
+
+    Un projet peut être manipulé par plusieurs acteurs (admin, chef de projet).
+
+    On doit encapsuler les règles métier ici : par exemple, un projet terminé ne peut plus recevoir de nouvelles tâches.
+
+    Méthodes typiques :
+
+    findAll(), findById(), create(ProjectDTO dto), update(ProjectDTO dto), delete(id)
+
+    assignTaskToProject(projectId, taskId) (optionnel)
+
+    */
+
 }

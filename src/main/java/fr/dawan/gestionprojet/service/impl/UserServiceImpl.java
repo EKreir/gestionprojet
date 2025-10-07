@@ -94,7 +94,31 @@ public class UserServiceImpl implements UserService {
     create() encodera le mot de passe via passwordEncoder.encode(rawPassword)
     (important pour sécurité).
 
+    Explications :
 
+    Rôle :
+    Gère la logique métier liée aux utilisateurs (création, mise à jour, suppression, récupération).
+
+    Pourquoi cette logique ?
+
+    Centraliser toute la logique liée aux utilisateurs dans une seule couche (évite la duplication dans les contrôleurs).
+
+    Respecter le principe de séparation des responsabilités (architecture en couches).
+
+    Principales méthodes :
+
+    | Méthode                                   | Description                                            | Explication métier                                                                                       |
+    | ----------------------------------------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
+    | `findAll()`                               | Récupère tous les utilisateurs sous forme de `UserDTO` | Utilise `userRepository.findAll()`, convertit chaque entité en DTO pour ne pas exposer les mots de passe |
+    | `findById(Long id)`                       | Trouve un utilisateur par son ID                       | Permet d’afficher les détails d’un utilisateur                                                           |
+    | `create(UserDTO dto, String rawPassword)` | Crée un nouvel utilisateur                             | Hash le mot de passe, affecte les rôles, enregistre en base et renvoie le DTO                            |
+    | `update(Long id, UserDTO dto)`            | Met à jour un utilisateur existant                     | Charge depuis la base, modifie uniquement les champs fournis, met à jour les rôles si besoin             |
+    | `delete(Long id)`                         | Supprime un utilisateur                                | Vérifie que l’utilisateur existe avant suppression                                                       |
+    | `toDto(User u)`                           | Transforme une entité en DTO                           | Permet d’exposer uniquement les données nécessaires sans mot de passe                                    |
+
+    En résumé :
+    Ce service assure la gestion métier des utilisateurs, tout en protégeant les données sensibles (password, rôles).
+    Il travaille main dans la main avec UserRepository et RoleRepository.
 
     */
 
