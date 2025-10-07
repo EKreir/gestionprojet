@@ -11,6 +11,8 @@ public class UserDTO {
     private Long id;
     private String username;
     private String email;
+
+    // roles names (ex: "CHIEF", "MEMBER)
     private Set<String> roles;
    // private Long taskIds;
 
