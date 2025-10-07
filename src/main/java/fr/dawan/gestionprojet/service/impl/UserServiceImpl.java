@@ -74,8 +74,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long id) {
-        if (!userRepository.existsById(id)) throw new ResourceNotFoundException("user introuvable", id);
-        userRepository.existsById(id);
+        if (!userRepository.existsById(id))
+            throw new ResourceNotFoundException("User", id);
+
+        userRepository.deleteById(id);
+        userRepository.flush(); // force la synchro avec la DB
     }
 
     private UserDTO toDto(User u) {
