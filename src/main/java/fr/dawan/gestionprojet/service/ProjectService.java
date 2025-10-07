@@ -1,0 +1,16 @@
+package fr.dawan.gestionprojet.service;
+
+import fr.dawan.gestionprojet.DTO.ProjectDTO;
+import fr.dawan.gestionprojet.DTO.UserDTO;
+
+
+import java.util.List;
+
+public interface ProjectService {
+    List<ProjectDTO> findAll();
+    ProjectDTO findById(Long id);
+    ProjectDTO create(ProjectDTO dto); // or have separate auth service
+    ProjectDTO update(Long id, ProjectDTO dto);
+    void delete(Long id);
+    ProjectDTO addMember(Long projectId, Long userId);
+}

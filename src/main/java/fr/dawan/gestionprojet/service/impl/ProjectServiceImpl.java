@@ -1,0 +1,104 @@
+package fr.dawan.gestionprojet.service.impl;
+
+import fr.dawan.gestionprojet.DTO.ProjectDTO;
+import fr.dawan.gestionprojet.DTO.TaskDTO;
+import fr.dawan.gestionprojet.exception.ResourceNotFoundException;
+import fr.dawan.gestionprojet.model.entity.Project;
+import fr.dawan.gestionprojet.model.entity.Task;
+import fr.dawan.gestionprojet.model.entity.User;
+import fr.dawan.gestionprojet.repository.ProjectRepository;
+import fr.dawan.gestionprojet.repository.TaskRepository;
+import fr.dawan.gestionprojet.repository.UserRepository;
+import fr.dawan.gestionprojet.service.ProjectService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class ProjectServiceImpl implements ProjectService {
+
+    private final ProjectRepository projectRepository;
+    private final UserRepository userRepository;
+    private final TaskRepository taskRepository;
+
+    @Override
+    public List<ProjectDTO> findAll() {
+
+        return projectRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public ProjectDTO findById(Long id) {
+        Project p = projectRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Project not find", id));
+        return toDto(p);
+    }
+
+    @Override
+    public ProjectDTO create(ProjectDTO dto) {
+        Project p = new Project();
+        p.setName(dto.getName());
+        p.setDescription(dto.getDescription());
+        p.setStartDate(dto.getStartDate());
+        p.setEndDate(dto.getEndDate());
+        Project saved = projectRepository.save(p);
+        return toDto(saved);
+    }
+
+    @Override
+    public ProjectDTO update(Long id, ProjectDTO dto) {
+        Project p = projectRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Project not find", id));
+        if (dto.getName() != null) p.setName(dto.getName());
+        if (dto.getDescription() != null) p.setDescription(dto.getDescription());
+        if (dto.getStartDate() != null) p.setStartDate(dto.getStartDate());
+        if (dto.getEndDate() != null) p.setEndDate(dto.getEndDate());
+        Project saved = projectRepository.save(p);
+        return toDto(saved);
+    }
+
+    @Override
+    public void delete(Long id) {
+        if (!projectRepository.existsById(id)) throw new ResourceNotFoundException("project introuvable", id);
+        projectRepository.existsById(id);
+
+    }
+
+    @Override
+    public ProjectDTO addMember(Long projectId, Long userId) {
+        Project p = projectRepository.findById(projectId).orElseThrow(()->new ResourceNotFoundException("Project not find", projectId));
+        User u = userRepository.findById(userId).orElseThrow(()->new ResourceNotFoundException("User not find", userId));
+        if (p.getMembers() == null) p.setMembers(new HashSet<>());
+        p.getMembers().add(u);
+        Project saved = projectRepository.save(p);
+        return toDto(saved);
+    }
+
+    private TaskDTO taskToDto(Task t) {
+        TaskDTO dto = new TaskDTO();
+        dto.setId(t.getId());
+        dto.setTitle(t.getTitle());
+        dto.setDescription(t.getDescription());
+        dto.setStatus(t.getStatus());
+        dto.setDueDate(t.getDueDate());
+        if (t.getAssignedUser() != null) dto.setAssignedUserId(t.getAssignedUser().getId());
+        dto.setProjectId(t.getProject() != null ? t.getProject().getId() : null);
+        return dto;
+    }
+
+    private ProjectDTO toDto(Project p) {
+        ProjectDTO dto = new ProjectDTO();
+        dto.setId(p.getId());
+        dto.setName(p.getName());
+        dto.setDescription(p.getDescription());
+        dto.setStartDate(p.getStartDate());
+        dto.setEndDate(p.getEndDate());
+        if (p.getMembers() != null)
+            dto.setMemberIds(p.getMembers().stream().map(User::getId).collect(Collectors.toSet()));
+        // optionally add tasks if you want:
+        // dto.tasks = p.getTasks().stream().map(this::taskToDto).collect(Collectors.toList());
+        return dto;
+    }
+}
