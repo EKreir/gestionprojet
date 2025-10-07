@@ -130,4 +130,33 @@ public class TaskServiceImpl implements TaskService {
         if (t.getAssignedUser() != null) dto.setAssignedUserId(t.getAssignedUser().getId());
         return dto;
     }
+
+    /*
+
+    Rôle :
+    Gérer les tâches : leur création, leur statut, leur affectation à un utilisateur et à un projet.
+
+    Pourquoi cette logique ?
+
+    Une tâche doit être créée dans le cadre d’un projet.
+
+    Son statut évolue (TODO , IN_PROGRESS , DONE)
+
+    Le service encapsule ces transitions et les règles associées.
+
+    Méthodes typiques :
+
+    create(TaskDTO dto)
+
+    updateStatus(Long id, TaskStatus newStatus)
+
+    assignToUser(Long taskId, Long userId)
+
+    delete(Long id)
+
+    En résumé :
+    Ce service permet de contrôler le cycle de vie des tâches et de s’assurer qu’elles restent cohérentes avec leur projet.
+
+    */
+
 }
