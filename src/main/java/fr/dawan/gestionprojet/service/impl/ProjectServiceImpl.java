@@ -12,6 +12,7 @@ import fr.dawan.gestionprojet.repository.UserRepository;
 import fr.dawan.gestionprojet.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -26,12 +27,14 @@ public class ProjectServiceImpl implements ProjectService {
     private final TaskRepository taskRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<ProjectDTO> findAll() {
 
         return projectRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ProjectDTO findById(Long id) {
         Project p = projectRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Project not find", id));
         return toDto(p);
@@ -67,6 +70,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Transactional
     public ProjectDTO addMember(Long projectId, Long userId) {
         Project p = projectRepository.findById(projectId).orElseThrow(()->new ResourceNotFoundException("Project not find", projectId));
         User u = userRepository.findById(userId).orElseThrow(()->new ResourceNotFoundException("User not find", userId));
