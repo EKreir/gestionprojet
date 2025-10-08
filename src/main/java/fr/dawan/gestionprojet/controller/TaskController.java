@@ -14,4 +14,14 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class TaskController {
 
+    @Autowired
+    private TaskService taskService;
+
+    // Récupérer toutes les tâches
+    @GetMapping
+    public ResponseEntity<List<TaskDTO>> getAllTasks() {
+        List<TaskDTO> tasks = taskService.findAll();
+        return ResponseEntity.ok(tasks);
+    }
+
 }
