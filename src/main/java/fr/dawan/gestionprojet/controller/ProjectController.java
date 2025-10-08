@@ -20,23 +20,23 @@ public class ProjectController {
     private ProjectService projectService;
 
     @GetMapping
-    public ResponseEntity<List<ProjectDTO>> findAll() {
+    public ResponseEntity<List<ProjectDTO>> getAllProject() {
         return ResponseEntity.ok(projectService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProjectDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<ProjectDTO> getProjectById(@PathVariable Long id) {
         return ResponseEntity.ok(projectService.findById(id));
     }
 
     @GetMapping("/{projectId}/members")
-    public ResponseEntity<Set<UserDTO>> getMembers(@PathVariable Long projectId) {
+    public ResponseEntity<Set<UserDTO>> getProjectMembers(@PathVariable Long projectId) {
         Set<UserDTO> members = projectService.getMembers(projectId);
         return ResponseEntity.ok(members);
     }
 
     @PostMapping
-    public ResponseEntity<ProjectDTO> create(@RequestBody ProjectDTO dto) {
+    public ResponseEntity<ProjectDTO> createProject(@RequestBody ProjectDTO dto) {
         ProjectDTO created = projectService.create(dto);
         return ResponseEntity.created(URI.create("/api/projects/" +
                 created.getId())).body(created);
@@ -48,18 +48,18 @@ public class ProjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProjectDTO> update(@PathVariable Long id, @RequestBody ProjectDTO dto) {
+    public ResponseEntity<ProjectDTO> updateProject(@PathVariable Long id, @RequestBody ProjectDTO dto) {
         return ResponseEntity.ok(projectService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
         projectService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{projectId}/members/{userId}")
-    public ResponseEntity<Void> removeMember(@PathVariable Long projectId, @PathVariable Long userId) {
+    public ResponseEntity<Void> removeProjectMember(@PathVariable Long projectId, @PathVariable Long userId) {
         projectService.removeMember(projectId, userId);
         return ResponseEntity.noContent().build(); // 204 NO CONTENT
     }
