@@ -31,3 +31,4 @@ Partie tasks :
 | **GET**    | `http://localhost:8080/api/tasks/project/1`            | —                                                                                                                                                                      | Récupère toutes les tâches d’un **projet donné**             |
 | **PATCH**  | `http://localhost:8080/api/tasks/1/assign/2`           | —                                                                                                                                                                      | Assigne la tâche `1` à l’utilisateur `2`                     |
 | **PATCH**  | `http://localhost:8080/api/tasks/1/status?status=DONE` | —                                                                                                                                                                      | Change le **statut** de la tâche (TODO → IN_PROGRESS → DONE) |
+
