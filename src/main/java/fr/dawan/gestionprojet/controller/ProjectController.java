@@ -3,7 +3,7 @@ package fr.dawan.gestionprojet.controller;
 import fr.dawan.gestionprojet.DTO.ProjectDTO;
 import fr.dawan.gestionprojet.DTO.UserDTO;
 import fr.dawan.gestionprojet.service.ProjectService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,11 +15,11 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api/projects")
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
+@RequiredArgsConstructor
 public class ProjectController {
 
-    @Autowired
-    private ProjectService projectService;
+    private final ProjectService projectService;
 
     @GetMapping
     public ResponseEntity<List<ProjectDTO>> getAllProject() {
