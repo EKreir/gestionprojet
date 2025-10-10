@@ -41,6 +41,7 @@ public class GestionprojetApplication {
 
 	@ToString et @ToString.Exclude (Lombok) -- exclure des champs
 
+
 	Lombok génère automatiquement toString(). Si toString() inclut des relations bidirectionnelles, tu peux créer :
 
 	une récursion infinie (A -> B -> A -> B -> ...) → StackOverflowError.
